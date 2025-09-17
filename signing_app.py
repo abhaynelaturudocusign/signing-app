@@ -120,7 +120,20 @@ def create_envelope_definition(signer_email, signer_name):
                 "recipientId": "1",
                 "clientUserId": "1000", # Required for embedded signing
                 "tabs": {
-                    "signHereTabs": [{"anchorString": "/sn1/"}]
+                    "signHereTabs": [
+                        {
+                            # This tab uses a fixed position on the first page.
+                            # This will satisfy the "place signing tabs" requirement.
+                            "xPosition": "100",
+                            "yPosition": "150",
+                            "documentId": "1",
+                            "pageNumber": "1"
+                        },
+                        {
+                            # The anchor string tab is kept as a fallback.
+                            "anchorString": "/sn1/"
+                        }
+                    ]
                 }
             }]
         },
