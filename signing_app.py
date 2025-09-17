@@ -140,7 +140,7 @@ def home():
     return """
     <h1>DocuSign Embedded Signing with Universal Signature Pen</h1>
     <p>This example will generate an access token, create an envelope with Universal Signature Pen, and then generate an embedded signing URL.</p>
-    <form action="sign" method="post">
+    <form action="/sign" method="post">
         <label for="signer_email">Signer Email:</label>
         <input type="email" name="signer_email" id="signer_email" placeholder="Enter signer email" required>
         <br><br>
