@@ -12,7 +12,7 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # --- CONFIGURATION (Move to config.ini or environment variables for production) ---
-INTEGRATION_KEY = 'c9b4d8d7-dc71-4ff1-9325-cc6f545d596a'
+INTEGRATION_KEY = 'dfba8887-518b-488d-a787-76794a3a6c9d'
 USER_ID = 'f5e619d1-0227-42e9-96f5-17e82cd4fa4c'
 ACCOUNT_ID = '5d72dc01-0dc7-4f64-9380-593270983810'
 BASE_PATH = 'demo.docusign.net'  # e.g., demo.docusign.net for developer sandbox
