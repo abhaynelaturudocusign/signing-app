@@ -16,33 +16,7 @@ app = Flask(__name__)
 # Replace with your actual values obtained from DocuSign Admin/Developer account
 INTEGRATION_KEY = 'c9b4d8d7-dc71-4ff1-9325-cc6f545d596a'  # Client ID
 USER_ID = 'f5e619d1-0227-42e9-96f5-17e82cd4fa4c'        # The GUID of the user who will be making API calls (must have consented to the app)
-PRIVATE_KEY_BYTES = """-----BEGIN RSA PRIVATE KEY-----
-MIIEogIBAAKCAQEAr1uJGosdfwrdn78oo3SVIlo5SEdn1CPx8Rdzfwsajf7tMkmt
-C/CLDiWPpNuLquQuCsEU1dbpZt3aZHCLS8wrL3LzPYaZbUnotlsYfGGnxF88jk/d
-28f98Z9hl32ic0AguOTkANUV1/3jOWXyMEPAWTcGu/nCbWZTcrhtsU/ccMELG/Gx
-A9rsgyDpBOCbfQqqhzb5PLxaQDRBkBLLfdD7Xzt5jeeHqnWc4enH0aPy1GoIQ3LY
-SrDy+gN/5kH0JooK5MGIuJC144/vZfFqP3JCUqadUXDy0c+FBZj31asMr5p5nwPc
-nJk+9vND2M6Sz+6Suykm9Kg19Kwo0cPIZmHJJwIDAQABAoIBABplGX1d/0dGKBc0
-O4u5r/uxv6Q6Nfi1SGT/y1S4znsdKjBC7WyPUn8DTFyGPL8GWvUnca7BC0opOVxG
-THv7nsHPov6vKfJMs7NEgapckKzQS68oJRRAmuApxhN6x7RirLTn+cyI8SFyh9H1
-9GnWE40vk9tA5vEh++GYEnrOszcNYm4u3q/BnlKsgI/wWSEYvWVkXjlOlLCr/mM9
-MNxxgG41EMLMVaJ/QkDyni4B7/5hpkMB0+VBsVv03LKK4OeHvgHf6FBVF6WtM9h/
-Pza1DtSHoMJZ3wyhSw9f3/U6a6A4QPj8KCmJtTgWeszxoHbm2K+1W+bwDQX8nhZY
-kcn05bECgYEA4GxCjFFXfi3GrZck5eLCZEZj5oY1IMva+D0lDAYvmB233qh9E7eX
-OHO3gkx3TfKMC4PnBnpGhPn/v04Tq3JDeK5u+ObKrz9eusJKrvZ/OLJtnebUsqyy
-T5vuiIdh7FMfHkTZm0C2rI70nRsrG0r2XIHZPKF1ptwNukvmEUI14VsCgYEAyAfv
-uNPuPn01m96Cx4GQGDZdF3HOS9R9KHjqN0jtFzWJpwt72KcEH4iF22pa6AkmM5Mh
-95aW/3T/OEeR7wYFwcyiVLayJdlweEIzvZq9kqRCV1/QypceFOv8WqeVJCsKDrq5
-5DO3SG7sQTwPzXTCYeTdouZKR4WSRHCNPvBfVSUCgYB57nftstgdhxN2BzOV7zD8
-uD3Y5rwA2KFc1CPHt6iuNh9LSzHBv7Laigx/L7p2UDyEmSKxI0gjQY0RTINlWAyO
-if9jHkmrE3wNbjiTfPu8Oz1RWDPh6/BpTmg4J44tjy/OC0xLjMpzUKxYm4U9K+pU
-cnwr8/FvOgn/WPNkFxwdFwKBgFocESau+g1WdFbyJvHe8N2nZ8pO70MDxxn7Vm9v
-P7cL3CXPK4xOuLHH250bTTZoILhtGIkjYoRT3UEqJJiLmv5Rw/Lrllcsm9jg4dQR
-KEMuEeCwfis1ZkzAfh8MjUgMx2wZO/KMRY2wwmckum2wonxdEGb43Q9ZIaoJFef7
-esatAoGAbjTdW7T7SJlxsJuocvvwluFPwWcLQH9EEa41ejxqRWK7O6zH9L1Skqp4
-azBS7QOi3uHpLhVg2LIHSgYwgzyTmD46iHCilDJ4FFMkkV4wSmfbVM4m7/iF9W1s
-6zTqd26pE2mZ44XgTxEY5tGyoX+5H1b9CVKncN8zGOAVqpyoJP4=
------END RSA PRIVATE KEY-----"""
+PRIVATE_KEY_FILE_PATH = "private.key"
 doc_file_path = "sample pdf.pdf"
 ACCOUNT_ID = '5d72dc01-0dc7-4f64-9380-593270983810'
 SIGNER_EMAIL = 'abhaykumar.cvr@gmail.com'
@@ -83,7 +57,7 @@ def get_access_token_jwt():
     try:
         # Load the private key
         private_key = serialization.load_pem_private_key(
-            PRIVATE_KEY_BYTES.encode("utf-8"),
+            PRIVATE_KEY_BYTES, # The key is already in bytes, no need to encode
             password=None,
             backend=default_backend()
         )
