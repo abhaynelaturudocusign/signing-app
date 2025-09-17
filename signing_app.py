@@ -16,7 +16,6 @@ app = Flask(__name__)
 # Replace with your actual values obtained from DocuSign Admin/Developer account
 INTEGRATION_KEY = 'c9b4d8d7-dc71-4ff1-9325-cc6f545d596a'  # Client ID
 USER_ID = 'f5e619d1-0227-42e9-96f5-17e82cd4fa4c'        # The GUID of the user who will be making API calls (must have consented to the app)
-PRIVATE_KEY_FILE_PATH = "private.key"
 doc_file_path = "sample pdf.pdf"
 ACCOUNT_ID = '5d72dc01-0dc7-4f64-9380-593270983810'
 SIGNER_EMAIL = 'abhaykumar.cvr@gmail.com'
@@ -42,6 +41,7 @@ with open(doc_file_path, "rb") as file:
 DOCUMENT_NAME = 'SampleDocument.pdf'
 DOCUMENT_ID = '1'
 
+# Find this function and replace the whole thing
 def get_access_token_jwt():
     """
     Obtains a DocuSign access token using the JWT Grant flow.
@@ -53,33 +53,42 @@ def get_access_token_jwt():
     if cached_access_token and token_expiration_time and datetime.now() < token_expiration_time - timedelta(minutes=5):
         print("Using cached access token.")
         return cached_access_token
+
     print("Generating new access token via JWT Grant...")
     try:
+        # --- CORRECTED CODE STARTS HERE ---
+        # Define the private key file path
+        private_key_file_path = "private.key"
+
+        # Read the private key from the file
+        with open(private_key_file_path, "rb") as key_file:
+            private_key_bytes = key_file.read()
+
         # Load the private key
         private_key = serialization.load_pem_private_key(
-            PRIVATE_KEY_BYTES, # The key is already in bytes, no need to encode
+            private_key_bytes, # The key is already in bytes
             password=None,
             backend=default_backend()
         )
-        # JWT Header
+        # --- CORRECTED CODE ENDS HERE ---
+
+        # ... (the rest of the function remains the same) ...
+
+        # JWT Header, Claims, etc.
         jwt_header = {
             "alg": "RS256",
             "typ": "JWT"
         }
-        # JWT Claims
-        # 'exp' (expiration time) must be in Unix epoch time, max 1 hour from now
         now = int(time.time())
         claims = {
             "iss": INTEGRATION_KEY,
             "sub": USER_ID,
-            "aud": "account-d.docusign.com", # For demo environment
-            "scope": "signature impersonation", # Request necessary scopes
+            "aud": "account-d.docusign.com",
+            "scope": "signature impersonation",
             "iat": now,
-            "exp": now + 60 * 60 # Expires in 1 hour
+            "exp": now + 60 * 60
         }
-        # Encode the JWT
         assertion = jwt.encode(claims, private_key, algorithm='RS256', headers=jwt_header)
-        # Prepare the token request
         token_request_data = {
             "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
             "assertion": assertion
@@ -87,24 +96,24 @@ def get_access_token_jwt():
         headers = {
             "Content-Type": "application/x-www-form-urlencoded"
         }
-        # Make the POST request to the OAuth token endpoint
         response = requests.post(OAUTH_BASE_URL, data=token_request_data, headers=headers)
-        response.raise_for_status() # Raise an exception for bad status codes
+        response.raise_for_status()
         token_data = response.json()
-        print(f"Token API Response:\n{json.dumps(token_data, indent=2)}")
+
         access_token = token_data.get("access_token")
-        expires_in = token_data.get("expires_in") # Typically 3600 seconds (1 hour)
+        expires_in = token_data.get("expires_in")
+
         if not access_token:
             raise Exception("Access token not found in response.")
+
         cached_access_token = access_token
         token_expiration_time = datetime.now() + timedelta(seconds=expires_in)
+
         print("Access token generated successfully.")
         return cached_access_token
-    except requests.exceptions.RequestException as e:
-        print(f"Error requesting access token: {e}")
-        if 'response' in locals():
-            print(f"Response status: {response.status_code}")
-            print(f"Response body: {response.text}")
+
+    except FileNotFoundError:
+        print(f"FATAL ERROR: The private key file 'private.key' was not found.")
         raise
     except Exception as e:
         print(f"An unexpected error occurred during token generation: {e}")
