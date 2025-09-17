@@ -43,7 +43,7 @@ esatAoGAbjTdW7T7SJlxsJuocvvwluFPwWcLQH9EEa41ejxqRWK7O6zH9L1Skqp4
 azBS7QOi3uHpLhVg2LIHSgYwgzyTmD46iHCilDJ4FFMkkV4wSmfbVM4m7/iF9W1s
 6zTqd26pE2mZ44XgTxEY5tGyoX+5H1b9CVKncN8zGOAVqpyoJP4=
 -----END RSA PRIVATE KEY-----"""
-doc_file_path = "/Users/abhay.nelaturu/Downloads/sample pdf.pdf"
+doc_file_path = "sample pdf.pdf"
 ACCOUNT_ID = '5d72dc01-0dc7-4f64-9380-593270983810'
 SIGNER_EMAIL = 'abhaykumar.cvr@gmail.com'
 SIGNER_NAME = 'AKCVR'
@@ -140,7 +140,7 @@ def home():
     return """
     <h1>DocuSign Embedded Signing with Universal Signature Pen</h1>
     <p>This example will generate an access token, create an envelope with Universal Signature Pen, and then generate an embedded signing URL.</p>
-    <form action="/sign" method="post">
+    <form action="sign" method="post">
         <label for="signer_email">Signer Email:</label>
         <input type="email" name="signer_email" id="signer_email" placeholder="Enter signer email" required>
         <br><br>
